@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Porch Goose Map</title>
-  <script src="="https://js.arcgis.com/4.27/"></script>
+  <script src="https://js.arcgis.com/4.27/"></script>
   <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
   <style>
     html, body, #viewDiv { padding: 0; margin: 0; height: 100%; font-family: sans-serif; }
@@ -36,5 +37,110 @@
   <div id="viewDiv"></div>
   <audio id="honkSuccess" src="3 honk.mp3" preload="auto"></audio>
   <audio id="honkClick" src="Goose-Honk-Sound-effect.mp3" preload="auto"></audio>
+
+  <script>
+    require([
+      "esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer",
+      "esri/Graphic", "esri/widgets/Expand"
+    ], (Map, MapView, FeatureLayer, Graphic, Expand) => {
+      const map = new Map({ basemap: "streets-navigation-vector" });
+      const view = new MapView({
+        container: "viewDiv", map, center: [-98, 39], zoom: 4
+      });
+
+      const gooseLayer = new FeatureLayer({
+        url: "https://services3.arcgis.com/Uyp2Wqt9tKbDqE4Z/arcgis/rest/services/Porch_Goose_Location/FeatureServer/0",
+        outFields: ["*"],
+        popupTemplate: {
+          title: "{goose_name}",
+          content: `
+            <b>Goose Stylist:</b> {submitted_by}<br/>
+            <b>City:</b> {city_hint}<br/>
+            <b>State:</b> {state}<br/>
+            <b>Submitted:</b> {submission_time}
+          `
+        }
+      });
+
+      map.add(gooseLayer);
+      let selectedPoint = null;
+
+      view.on("click", (event) => {
+        selectedPoint = {
+          latitude: event.mapPoint.latitude,
+          longitude: event.mapPoint.longitude
+        };
+      });
+
+      view.on("pointer-move", () => {
+        view.hitTest(view.center).then(({ results }) => {
+          results.forEach((result) => {
+            if (result.graphic && result.graphic.layer === gooseLayer) {
+              document.getElementById("honkClick").play();
+            }
+          });
+        });
+      });
+
+      document.getElementById("gooseForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!selectedPoint) {
+          alert("Please click on the map to choose where your goose lives!");
+          return;
+        }
+
+        const attributes = {
+          goose_name: document.getElementById("gooseName").value,
+          submitted_by: document.getElementById("submittedBy").value,
+          city_hint: document.getElementById("cityHint").value,
+          state: document.getElementById("state").value,
+          submission_time: new Date().toISOString()
+        };
+
+        const addFeatureResponse = await gooseLayer.applyEdits({
+          addFeatures: [
+            new Graphic({
+              geometry: {
+                type: "point",
+                latitude: selectedPoint.latitude,
+                longitude: selectedPoint.longitude
+              },
+              attributes
+            })
+          ]
+        });
+
+        const objectId = addFeatureResponse.addFeatureResults[0].objectId;
+        const photoFile = document.getElementById("photo").files[0];
+        document.getElementById("honkSuccess").play();
+
+        if (photoFile && objectId) {
+          const formData = new FormData();
+          formData.append("attachment", photoFile);
+
+          try {
+            const response = await fetch(
+              \`https://services3.arcgis.com/Uyp2Wqt9tKbDqE4Z/arcgis/rest/services/Porch_Goose_Location/FeatureServer/0/\${objectId}/addAttachment\`,
+              { method: "POST", body: formData }
+            );
+            const result = await response.json();
+            if (result?.addAttachmentResult?.success) {
+              alert("Your goose is now out there honking in style!");
+            } else {
+              alert("Your goose is posted, but the photo didn’t quite make it.");
+            }
+          } catch (err) {
+            console.error("Photo upload failed:", err);
+            alert("Goose posted, but photo upload had a hiccup.");
+          }
+        } else {
+          alert("Goose submitted with no photo — a mystery honker!");
+        }
+
+        document.getElementById("gooseForm").reset();
+        selectedPoint = null;
+      });
+    });
+  </script>
 </body>
 </html>
