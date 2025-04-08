@@ -108,6 +108,15 @@
               "<b>State:</b> " + attrs.state + "<br/>" +
               "<b>Submitted:</b> " + new Date(attrs.submission_time).toLocaleString();
           }
+        },
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "picture-marker",
+            url: "https://raw.githubusercontent.com/catl8y/sillygoose/main/goose_clip.png",
+            width: "32px",
+            height: "32px"
+          }
         }
       });
 
@@ -177,12 +186,6 @@
 
         const gooseGraphic = new Graphic({
           geometry: location,
-          symbol: {
-            type: "picture-marker",
-            url: "https://raw.githubusercontent.com/catl8y/sillygoose/main/goose_clip.png",
-            width: "32px",
-            height: "32px"
-          },
           attributes: attributes
         });
 
