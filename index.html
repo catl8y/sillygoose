@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Porch Goose Map</title>
+  <script src="="https://js.arcgis.com/4.27/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
+  <style>
+    html, body, #viewDiv { padding: 0; margin: 0; height: 100%; font-family: sans-serif; }
+    #formContainer {
+      position: absolute; top: 10px; left: 10px; background: white; padding: 15px;
+      border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 99; width: 300px;
+    }
+    #formContainer h2 { margin-top: 0; }
+    input, textarea { width: 100%; margin-bottom: 10px; padding: 6px; }
+    #submitBtn {
+      padding: 10px; background-color: #4CAF50; color: white; border: none;
+      cursor: pointer; width: 100%;
+    }
+    #submitBtn:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
+  <div id="formContainer">
+    <h2>Show Off Your Porch Goose</h2>
+    <form id="gooseForm">
+      <input type="text" id="gooseName" placeholder="Goose Name" maxlength="50" /><br />
+      <input type="text" id="submittedBy" placeholder="Goose Stylist" maxlength="50" /><br />
+      <input type="text" id="cityHint" placeholder="City" maxlength="50" /><br />
+      <input type="text" id="state" placeholder="State (e.g. NY)" maxlength="2" /><br />
+      <input type="file" id="photo" accept="image/*" /><br />
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+  </div>
+  <div id="viewDiv"></div>
+  <audio id="honkSuccess" src="3 honk.mp3" preload="auto"></audio>
+  <audio id="honkClick" src="Goose-Honk-Sound-effect.mp3" preload="auto"></audio>
+</body>
+</html>
