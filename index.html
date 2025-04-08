@@ -166,9 +166,11 @@
 
       view.on("click", function(event) {
   view.hitTest(event).then(function(response) {
-    response.results.forEach(function(result) {
-      if (result.graphic && result.graphic.layer === gooseLayer) {
-        document.getElementById("honkClick").play();
+    const pinClicked = response.results.find(result =>
+      result.graphic && result.graphic.layer === gooseLayer
+    );
+    if (pinClicked) {
+      document.getElementById("honkClick").play();
             }
           });
         });
