@@ -136,13 +136,12 @@
 
         const gooseGraphic = new Graphic({
           geometry: location,
-          symbol: new TextSymbol({
-            text: "🪿",
-            color: "black",
-            font: { size: 20 }
-          }),
-          attributes: attributes
-        });
+          symbol: {
+  type: "picture-marker",
+  url: "https://raw.githubusercontent.com/catl8y/sillygoose/main/goose_clip.png",
+  width: "32px",
+  height: "32px"
+},
 
         await gooseLayer.applyEdits({
           addFeatures: [gooseGraphic]
