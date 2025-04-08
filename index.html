@@ -219,6 +219,26 @@ require([
               attributes
             })
           ]
+        }).then(() => {
+          // Add visual marker
+          const gooseGraphic = new Graphic({
+            geometry: location,
+            symbol: {
+              type: "picture-marker",
+              url: "https://raw.githubusercontent.com/catl8y/sillygoose/main/goose_clip.png",
+              width: "32px",
+              height: "32px"
+            },
+            attributes: attributes
+          });
+          graphicsLayer.add(gooseGraphic);
+        });
+          addFeatures: [
+            new Graphic({
+              geometry: location,
+              attributes
+            })
+          ]
         });
 
         // Show custom marker
