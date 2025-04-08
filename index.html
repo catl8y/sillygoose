@@ -7,7 +7,7 @@
   <script src="https://js.arcgis.com/4.27/"></script>
   <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
   <style>
-    html, body {
+    html, body, #viewDiv {
       margin: 0;
       padding: 0;
       height: 100%;
@@ -15,15 +15,6 @@
       font-family: sans-serif;
       overflow: hidden;
     }
-
-    #viewDiv {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
     #formContainer {
       position: absolute;
       top: 60px;
@@ -38,19 +29,16 @@
       overflow-y: auto;
       font-size: 0.95em;
     }
-
     #formContainer h2 {
       margin-top: 0;
       font-size: 1em;
     }
-
     input, textarea {
       width: 100%;
       margin-bottom: 8px;
       padding: 6px;
       font-size: 1em;
     }
-
     #submitBtn {
       padding: 10px;
       background-color: #4CAF50;
@@ -61,11 +49,9 @@
       font-size: 1em;
       border-radius: 4px;
     }
-
     #submitBtn:hover {
       background-color: #45a049;
     }
-
     #toggleFormBtn {
       position: absolute;
       top: 10px;
@@ -78,31 +64,6 @@
       font-size: 1em;
       border-radius: 8px;
       cursor: pointer;
-    }
-
-    @media screen and (max-width: 600px) {
-      #formContainer {
-        width: 90%;
-        left: 5%;
-        top: 60px;
-        font-size: 0.9em;
-        padding: 10px;
-      }
-
-      #toggleFormBtn {
-        font-size: 0.9em;
-        padding: 8px 10px;
-        width: 120px;
-      }
-
-      input, textarea {
-        font-size: 0.9em;
-        padding: 6px;
-      }
-
-      #submitBtn {
-        font-size: 0.95em;
-      }
     }
   </style>
 </head>
@@ -245,7 +206,6 @@
         });
       });
 
-      // Toggle form visibility
       const toggleBtn = document.getElementById("toggleFormBtn");
       const formContainer = document.getElementById("formContainer");
       toggleBtn.addEventListener("click", () => {
