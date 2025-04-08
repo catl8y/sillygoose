@@ -21,6 +21,11 @@
       color: white;
       max-height: 85%;
       overflow-y: auto;
+      background-color: #1b2d2f;
+      border: 2px solid #ff69b4;
+      color: white;
+      max-height: 85%;
+      overflow-y: auto;
       position: absolute;
       top: 60px;
       left: 10px;
@@ -43,12 +48,20 @@
       border: 1px solid #dda0dd;
       border-radius: 6px;
       color: white;
+      background-color: #2e4446;
+      border: 1px solid #dda0dd;
+      border-radius: 6px;
+      color: white;
       width: 100%;
       margin-bottom: 8px;
       padding: 6px;
       font-size: 1em;
     }
     #submitBtn {
+      background-color: #ffd700;
+      color: #1b2d2f;
+      font-weight: bold;
+      border-radius: 6px;
       background-color: #ffd700;
       color: #1b2d2f;
       font-weight: bold;
@@ -63,6 +76,8 @@
       border-radius: 4px;
     }
     #submitBtn:hover {
+      background-color: #ff69b4;
+      color: white;
       background-color: #ff69b4;
       color: white;
       background-color: #45a049;
@@ -100,7 +115,8 @@
   <audio id="honkClick" src="Goose-Honk-Sound-Effect.mp3" preload="auto"></audio>
 
   <script>
-    require([
+    esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurP8qpCESklse0D9dY4_nD_bIlmB1lzGQ1q0-iWay_NciwWM4fwMgNT2_b_EKe7OymPTHav8Sbw0rh3x_MxgPYWNXEutyVEG7fh2cxJtJ0We1zOWpIkO81vQnolked3Mi650aJ-KJ_TeIr9ei--nsyKymxnqaf0BNqC7A4TJEwTIPXFzmtWPVFOnbfjl6Xamabbpk2wv8XePY0ahrBH21eowDNs8z8DZPMEJU2LZvs41GAT1_9gm9GYGR";
+require([
       "esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer",
       "esri/Graphic", "esri/config", "esri/rest/locator"
     ], function(Map, MapView, FeatureLayer, GraphicsLayer, Graphic, esriConfig, locator) {
