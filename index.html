@@ -60,15 +60,26 @@
           title: "{goose_name}",
           content: function(evt) {
             const attrs = evt.graphic.attributes;
-            const imgTag = attrs.photo_url ? `<img src="${attrs.photo_url}" width="200" /><br/>` : "🪿<br/>";
-            return imgTag +
-              "<b>Goose Stylist:</b> " + attrs.submitted_by + "<br/>" +
-              "<b>City:</b> " + attrs.city_hint + "<br/>" +
-              "<b>State:</b> " + attrs.state + "<br/>" +
-              "<b>Submitted:</b> " + new Date(attrs.submission_time).toLocaleString();
-          }
-        }
-      });
+      const imgTag = attrs.photo_url ? `<img src="${attrs.photo_url}" width="200" /><br/>` : "🪿<br/>";
+      return imgTag +
+        "<b>Goose Stylist:</b> " + attrs.submitted_by + "<br/>" +
+        "<b>City:</b> " + attrs.city_hint + "<br/>" +
+        "<b>State:</b> " + attrs.state + "<br/>" +
+        "<b>Submitted:</b> " + new Date(attrs.submission_time).toLocaleString();
+    }
+  },
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "text",
+      text: "🪿",
+      font: {
+        size: 20
+      },
+      color: "black"
+    }
+  }
+});
 
       map.add(gooseLayer);
 
