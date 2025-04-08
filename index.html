@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content=device-width, initial-scale=1.0/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Porch Goose Map</title>
   <script src="https://js.arcgis.com/4.27/"></script>
   <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
@@ -16,16 +16,6 @@
       overflow: hidden;
     }
     #formContainer {
-      background-color: #1b2d2f;
-      border: 2px solid #ff69b4;
-      color: white;
-      max-height: 85%;
-      overflow-y: auto;
-      background-color: #1b2d2f;
-      border: 2px solid #ff69b4;
-      color: white;
-      max-height: 85%;
-      overflow-y: auto;
       position: absolute;
       top: 60px;
       left: 10px;
@@ -44,28 +34,12 @@
       font-size: 1em;
     }
     input, textarea {
-      background-color: #2e4446;
-      border: 1px solid #dda0dd;
-      border-radius: 6px;
-      color: white;
-      background-color: #2e4446;
-      border: 1px solid #dda0dd;
-      border-radius: 6px;
-      color: white;
       width: 100%;
       margin-bottom: 8px;
       padding: 6px;
       font-size: 1em;
     }
     #submitBtn {
-      background-color: #ffd700;
-      color: #1b2d2f;
-      font-weight: bold;
-      border-radius: 6px;
-      background-color: #ffd700;
-      color: #1b2d2f;
-      font-weight: bold;
-      border-radius: 6px;
       padding: 10px;
       background-color: #4CAF50;
       color: white;
@@ -76,10 +50,6 @@
       border-radius: 4px;
     }
     #submitBtn:hover {
-      background-color: #ff69b4;
-      color: white;
-      background-color: #ff69b4;
-      color: white;
       background-color: #45a049;
     }
     #toggleFormBtn {
@@ -115,41 +85,44 @@
   <audio id="honkClick" src="Goose-Honk-Sound-Effect.mp3" preload="auto"></audio>
 
   <script>
-    esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurP8qpCESklse0D9dY4_nD_bIlmB1lzGQ1q0-iWay_NciwWM4fwMgNT2_b_EKe7OymPTHav8Sbw0rh3x_MxgPYWNXEutyVEG7fh2cxJtJ0We1zOWpIkO81vQnolked3Mi650aJ-KJ_TeIr9ei--nsyKymxnqaf0BNqC7A4TJEwTIPXFzmtWPVFOnbfjl6Xamabbpk2wv8XePY0ahrBH21eowDNs8z8DZPMEJU2LZvs41GAT1_9gm9GYGR";
-require([
-      "esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer",
+    require([
+      "esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer",
       "esri/Graphic", "esri/config", "esri/rest/locator"
-    ], function(Map, MapView, FeatureLayer, GraphicsLayer, Graphic, esriConfig, locator) {
+    ], function(Map, MapView, FeatureLayer, Graphic, esriConfig, locator) {
       esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurP8qpCESklse0D9dY4_nD_bIlmB1lzGQ1q0-iWay_NciwWM4fwMgNT2_b_EKe7OymPTHav8Sbw0rh3x_MxgPYWNXEutyVEG7fh2cxJtJ0We1zOWpIkO81vQnolked3Mi650aJ-KJ_TeIr9ei--nsyKymxnqaf0BNqC7A4TJEwTIPXFzmtWPVFOnbfjl6Xamabbpk2wv8XePY0ahrBH21eowDNs8z8DZPMEJU2LZvs41GAT1_9gm9GYGR";
-
-      const gooseIconUrl = "https://raw.githubusercontent.com/catl8y/sillygoose/main/goose_clip.png";
 
       const map = new Map({ basemap: "dark-gray-vector" });
       const view = new MapView({ container: "viewDiv", map: map, center: [-98, 39], zoom: 4 });
 
       const gooseLayer = new FeatureLayer({
         url: "https://services3.arcgis.com/Uyp2Wqt9tKbDqE4Z/arcgis/rest/services/Goose_Location/FeatureServer/0",
-        outFields: ["*"]
-      });
-
-      const graphicsLayer = new GraphicsLayer();
-      map.addMany([gooseLayer, graphicsLayer]);
-
-      const geocodeServiceUrl = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-
-      async function addGooseMarker(location, attributes) {
-        const gooseGraphic = new Graphic({
-          geometry: location,
+        outFields: ["*"],
+        popupTemplate: {
+          title: "{goose_name}",
+          content: function(evt) {
+            const attrs = evt.graphic.attributes;
+            const imgTag = attrs.photo_url ? `<img src="${attrs.photo_url}" width="200" /><br/>` : "🪿<br/>";
+            return imgTag +
+              "<b>Goose Stylist:</b> " + attrs.submitted_by + "<br/>" +
+              "<b>City:</b> " + attrs.city_hint + "<br/>" +
+              "<b>State:</b> " + attrs.state + "<br/>" +
+              "<b>Submitted:</b> " + new Date(attrs.submission_time).toLocaleString();
+          }
+        },
+        renderer: {
+          type: "simple",
           symbol: {
             type: "picture-marker",
-            url: gooseIconUrl,
+            url: "https://raw.githubusercontent.com/catl8y/sillygoose/main/goose_clip.png",
             width: "32px",
             height: "32px"
-          },
-          attributes
-        });
-        graphicsLayer.add(gooseGraphic);
-      }
+          }
+        }
+      });
+
+      map.add(gooseLayer);
+
+      const geocodeServiceUrl = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
       document.getElementById("gooseForm").addEventListener("submit", async function(e) {
         e.preventDefault();
@@ -211,38 +184,14 @@ require([
           photo_url: photo_url
         };
 
-        // Add to FeatureLayer
-        await gooseLayer.applyEdits({
-          addFeatures: [
-            new Graphic({
-              geometry: location,
-              attributes
-            })
-          ]
-        }).then(() => {
-          // Add visual marker
-          const gooseGraphic = new Graphic({
-            geometry: location,
-            symbol: {
-              type: "picture-marker",
-              url: "https://raw.githubusercontent.com/catl8y/sillygoose/main/goose_clip.png",
-              width: "32px",
-              height: "32px"
-            },
-            attributes: attributes
-          });
-          graphicsLayer.add(gooseGraphic);
-        });
-          addFeatures: [
-            new Graphic({
-              geometry: location,
-              attributes
-            })
-          ]
+        const gooseGraphic = new Graphic({
+          geometry: location,
+          attributes: attributes
         });
 
-        // Show custom marker
-        addGooseMarker(location, attributes);
+        await gooseLayer.applyEdits({
+          addFeatures: [gooseGraphic]
+        });
 
         document.getElementById("honkSuccess").play();
         alert("HONK! Goose submitted!");
@@ -252,7 +201,7 @@ require([
       view.on("click", function(event) {
         view.hitTest(event).then(function(response) {
           const pinClicked = response.results.find(result =>
-            result.graphic && result.graphic.layer === graphicsLayer
+            result.graphic && result.graphic.layer === gooseLayer
           );
           if (pinClicked) {
             document.getElementById("honkClick").play();
