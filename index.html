@@ -54,12 +54,12 @@
       const view = new MapView({ container: "viewDiv", map: map, center: [-98, 39], zoom: 4 });
 
       const gooseLayer = new FeatureLayer({
-        url: "https://services3.arcgis.com/Uyp2Wqt9tKbDqE4Z/arcgis/rest/services/Goose_Location/FeatureServer/0",
-        outFields: ["*"],
-        popupTemplate: {
-          title: "{goose_name}",
-          content: function(evt) {
-            const attrs = evt.graphic.attributes;
+  url: "https://services3.arcgis.com/Uyp2Wqt9tKbDqE4Z/arcgis/rest/services/Goose_Location/FeatureServer/0",
+  outFields: ["*"],
+  popupTemplate: {
+    title: "{goose_name}",
+    content: function(evt) {
+      const attrs = evt.graphic.attributes;
       const imgTag = attrs.photo_url ? `<img src="${attrs.photo_url}" width="200" /><br/>` : "🪿<br/>";
       return imgTag +
         "<b>Goose Stylist:</b> " + attrs.submitted_by + "<br/>" +
@@ -67,8 +67,7 @@
         "<b>State:</b> " + attrs.state + "<br/>" +
         "<b>Submitted:</b> " + new Date(attrs.submission_time).toLocaleString();
     }
-  },
- 
+  }
 });
 
       map.add(gooseLayer);
