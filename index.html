@@ -140,7 +140,6 @@
       color: white;
     }
     
-    /* Toggle Button (moved inside the form container, bottom left) */
     #toggleFormBtn {
   position: fixed;
   bottom: 20px; /* 👈 You can nudge this value */
@@ -189,6 +188,14 @@
         padding: 12px;
         max-height: unset;
       }
+	  
+	  /* ... other mobile styles ... */
+
+  #toggleFormBtn {
+    width: 120px;
+    font-size: 0.85rem;
+    padding: 6px 8px;
+  }
     
       h1 {
         font-size: 2.2rem;
@@ -225,14 +232,6 @@
         width: 100%;
         font-size: 1.2rem;
         padding: 10px;
-      }
-    
-	/* REMOVE or COMMENT OUT this */
-      #toggleFormBtn {
-        position: static;
-        margin-top: 10px;
-        width: 100%;
-        font-size: 0.95rem;
       }
 	  
 	  /* === Mobile Multi-Step Logic === */
