@@ -142,7 +142,7 @@
     
     /* Toggle Button (moved inside the form container, bottom left) */
     #toggleFormBtn {
-  position: absolute;
+  position: fixed;
   bottom: 20px; /* 👈 You can nudge this value */
   left: 12px;
   z-index: 1000;
@@ -337,14 +337,6 @@
   <audio id="honkClick" preload="auto" src="Goose-Honk-Sound-Effect.mp3">
   </audio>
   <script src="formLogic.js">
-  </script>
-  <script>
-   document.getElementById("toggleFormBtn").addEventListener("click", () => {
-  const container = document.getElementById("formContainer");
-  const isVisible = container.style.display !== "none";
-  container.style.display = isVisible ? "none" : "block";
-  document.getElementById("toggleFormBtn").textContent = isVisible ? "Show Form" : "Hide Form";
-});
   </script>
  </body>
 </html>

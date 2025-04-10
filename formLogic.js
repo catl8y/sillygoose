@@ -61,11 +61,15 @@ require([
 
   const geocodeServiceUrl = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
-  document.getElementById("toggleFormBtn").addEventListener("click", () => {
-    const container = document.getElementById("formContainer");
+  view.when(() => {
+  const toggleBtn = document.getElementById("toggleFormBtn");
+  const container = document.getElementById("formContainer");
+
+  toggleBtn.addEventListener("click", () => {
     const isVisible = container.style.display !== "none";
     container.style.display = isVisible ? "none" : "block";
-    document.getElementById("toggleFormBtn").textContent = isVisible ? "Show Form" : "Hide Form";
+    toggleBtn.textContent = isVisible ? "Show Form" : "Hide Form";
+  });
   });
 
   document.getElementById("gooseForm").addEventListener("submit", async function(e) {
