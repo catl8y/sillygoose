@@ -69,7 +69,7 @@ h2 {
 
 .form-row {
   display: flex;
-  gap: 4x; /* smaller gap between City and State */
+  gap: 10px; /* smaller gap between City and State */
   align-items: flex-end; /* keep fields bottom-aligned */
 }
 
@@ -271,7 +271,11 @@ button:hover {
     font-size: 0.95rem;
   }
   
-  @media (max-width: 600px) {
+  
+}
+
+
+@media (max-width: 600px) {
   #formContainer {
     top: 20px;
     left: 0;
@@ -282,6 +286,7 @@ button:hover {
     border-width: 2px;
     padding: 16px;
     border-radius: 12px;
+    position: relative;
   }
 
   h1 {
@@ -304,7 +309,7 @@ button:hover {
 
   .form-row {
     flex-direction: column;
-    gap: 0;
+    gap: 10px;
   }
 
   .form-group.small {
@@ -328,7 +333,6 @@ button:hover {
     font-size: 0.95rem;
     width: 100%;
   }
-}
 }
 
 </style>
