@@ -1,4 +1,3 @@
-
 require([
   "esri/Map",
   "esri/views/MapView",
@@ -14,7 +13,7 @@ require([
   const map = new Map({
     basemap: new Basemap({
       portalItem: {
-        id: "826498a48bd0424f9c9315214f2165d4" // Colored Pencil (WGS84)
+        id: "826498a48bd0424f9c9315214f2165d4" // Colored Pencil (Web Mercator version)
       }
     })
   });
@@ -157,4 +156,51 @@ require([
       }
     });
   });
+
+  // --- Multi-Step Mobile Form Logic ---
+// --- Multi-Step Mobile Form Logic ---
+const steps = document.querySelectorAll('.step');
+let currentStepIndex = 0;
+
+function updateSteps() {
+  if (window.innerWidth > 600) {
+    // Desktop: show all steps normally
+    steps.forEach(step => {
+      step.classList.add("active");
+      step.style.display = "block";
+      const nextBtn = step.querySelector(".nextBtn");
+      if (nextBtn) nextBtn.style.display = "none"; // hide next buttons
+    });
+  } else {
+    // Mobile: show only one step
+    steps.forEach((step, i) => {
+      step.classList.remove("active");
+      step.style.display = "none";
+      const nextBtn = step.querySelector(".nextBtn");
+      if (nextBtn) nextBtn.style.display = "inline-block";
+    });
+    steps[currentStepIndex].classList.add("active");
+    steps[currentStepIndex].style.display = "block";
+  }
+}
+
+// Add a "Next" button to each step (but only show on mobile)
+steps.forEach((step, i) => {
+  if (i < steps.length - 1 && !step.querySelector(".nextBtn")) {
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.className = "nextBtn";
+    nextBtn.textContent = "Next";
+    nextBtn.style.margin = "10px 0";
+    nextBtn.addEventListener("click", () => {
+      currentStepIndex = Math.min(currentStepIndex + 1, steps.length - 1);
+      updateSteps();
+    });
+    step.appendChild(nextBtn);
+  }
+});
+
+window.addEventListener("resize", updateSteps);
+updateSteps();
+
 });

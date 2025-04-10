@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Porch Goose Parade
+  </title>
+  <script src="https://js.arcgis.com/4.27/">
+  </script>
+  <link href="https://js.arcgis.com/4.27/esri/themes/light/main.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&amp;family=Indie+Flower&amp;family=Shadows+Into+Light&amp;family=Waiting+for+the+Sunrise&amp;display=swap" rel="stylesheet"/>
+  <style>
+   /* Title and subtitle */
+    h1 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 3rem;        
+      margin-bottom: 10px;    
+      color: #C45552;
+      text-align: center;
+    }
+    
+    h2 {
+      font-family: 'Indie Flower', cursive;
+      font-size: 1.5rem;      
+      margin-top: 0;
+      color: #6fbadb;
+      text-align: center;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Delius', cursive;
+    }
+    
+    #viewDiv {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+    }
+    
+    /* Form container styling */
+    #formContainer {
+      position: absolute;
+      top: 60px;
+      left: 10px;
+      z-index: 99;
+      background-color: #f8f6f0;
+      border: 3px solid #C45552;
+      border-radius: 8px;
+      /* Padding control */
+      padding-top: -5px;
+      padding-right: 16px;
+      padding-bottom: 10px;
+      padding-left: 16px;
+      width: 30vw;
+      max-width: 360px;
+      box-sizing: border-box;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      position: relative;  /* Added for internal absolute positioning */
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 10px; /* Fixed unit */
+      align-items: flex-end;
+    }
+    
+    .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group.small {
+      flex: 0 0 auto;
+      width: 50px; /* slightly smaller */
+      margin-left: -20px; /* nudges State box leftward */
+    }
+    
+    .button-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    
+    label {
+      font-family: 'Shadows Into Light', cursive;
+      color: #3D1E4F;
+      font-weight: 600;
+      font-size: 1.15rem;
+      letter-spacing: 0.08em;
+      display: block;
+      margin: 10px 0 5px;
+    }
+    
+    input[type="text"],
+    input[type="file"] {
+      width: 70%;
+      padding: 6px 8px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 2.2px solid #F5A6B7;
+      background-color: #f8f6f0;
+      color: #3D1E4F;
+      font-family: 'Indie Flower', cursive;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    
+    input[type="text"]:focus,
+    input[type="file"]:focus {
+      border-color: #C3A9DD;  /* Pastel Lavender */
+      outline: none;
+    }
+    
+    button {
+      background-color: #FFFFFF;
+      color: #1b1b1b;
+      border: 2px solid #C45552;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-family: 'Waiting for the Sunrise', cursive;
+      font-weight: bold;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #F5A6B7;
+      color: white;
+    }
+    
+    /* Toggle Button (moved inside the form container, bottom left) */
+    #toggleFormBtn {
+  position: absolute;
+  bottom: 20px; /* 👈 You can nudge this value */
+  left: 12px;
+  z-index: 1000;
+  padding: 6px 12px;
+  background-color: #e2f0d8;
+  color: #1b1b1b;
+  border: 2px solid #C45552;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  font-family: 'Waiting for the Sunrise', cursive;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+    
+    #toggleFormBtn:hover {
+      background-color: rgba(255, 105, 180, 0.7);
+      color: white;
+    }
+    
+    #toggleFormBtn:active {
+      opacity: 0.8;
+    }
+    
+    .city-group {
+      flex-grow: 1;
+    }
+    
+    .form-group.small {
+      flex-shrink: 0;
+      width: 60px;
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* MOBILE STYLES */
+	/* REMOVE or COMMENT OUT this */
+    @media (max-width: 600px) {
+      #formContainer {
+        width: 90vw;
+        left: 5vw;
+        top: 40px;
+        padding: 12px;
+        max-height: unset;
+      }
+    
+      h1 {
+        font-size: 2.2rem;
+        text-align: center;
+      }
+    
+      h2 {
+        font-size: 1.2rem;
+        text-align: center;
+      }
+    
+      input[type="text"],
+      input[type="file"] {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 8px;
+      }
+    
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    
+      .form-group.small {
+        width: 100%;
+        margin-left: 0;
+      }
+    
+      .button-row {
+        justify-content: center;
+      }
+    
+      button {
+        width: 100%;
+        font-size: 1.2rem;
+        padding: 10px;
+      }
+    
+	/* REMOVE or COMMENT OUT this */
+      #toggleFormBtn {
+        position: static;
+        margin-top: 10px;
+        width: 100%;
+        font-size: 0.95rem;
+      }
+	  
+	  /* === Mobile Multi-Step Logic === */
+		@media (max-width: 600px) {
+  .step {
+    display: none;
+  }
+
+  .step.active {
+    display: block;
+  }
+    }
+  
+/* === Mobile Multi-Step Logic === */
+@media (max-width: 600px) {
+  .step {
+    display: none;
+    padding: 0 10px;
+  }
+
+  .step.active {
+    display: block;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-group.small {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  input[type="text"],
+  input[type="file"] {
+    width: 100% !important;
+  }
+}
+  </style>
+ </head>
+ <body>
+  <button id="toggleFormBtn">
+   Hide Form
+  </button>
+  <div id="formContainer">
+   <h1>
+    Porch Goose Parade
+   </h1>
+   <h2>
+    Submit your stylish gander
+   </h2>
+   <form id="gooseForm">
+    <div class="step active">
+     <label for="gooseName">
+      Goose Name
+     </label>
+     <input id="gooseName" maxlength="50" name="gooseName" type="text"/>
+    </div>
+    <div class="step">
+     <label for="submittedBy">
+      Stylist
+     </label>
+     <input id="submittedBy" maxlength="50" name="submittedBy" type="text"/>
+    </div>
+    <div class="step">
+     <div class="form-row">
+      <div class="form-group">
+       <label for="cityHint">
+        City
+       </label>
+       <input id="cityHint" maxlength="50" name="cityHint" type="text"/>
+      </div>
+      <div class="form-group small">
+       <label for="state">
+        State
+       </label>
+       <input id="state" maxlength="2" name="state" type="text"/>
+      </div>
+     </div>
+    </div>
+    <div class="step">
+     <label for="photo">
+      Upload a Photo
+     </label>
+     <input accept="image/*" id="photo" name="photo" type="file"/>
+    </div>
+    <div class="step">
+     <div class="button-row">
+      <button type="submit">
+       Honk!
+      </button>
+     </div>
+    </div>
+   </form>
+   <!-- Toggle button inside the container at the bottom left -->
+  </div>
+  <div id="viewDiv">
+  </div>
+  <audio id="honkSuccess" preload="auto" src="3 honk.mp3">
+  </audio>
+  <audio id="honkClick" preload="auto" src="Goose-Honk-Sound-Effect.mp3">
+  </audio>
+  <script src="formLogic.js">
+  </script>
+  <script>
+   document.getElementById("toggleFormBtn").addEventListener("click", () => {
+  const container = document.getElementById("formContainer");
+  const isVisible = container.style.display !== "none";
+  container.style.display = isVisible ? "none" : "block";
+  document.getElementById("toggleFormBtn").textContent = isVisible ? "Show Form" : "Hide Form";
+});
+  </script>
+ </body>
+</html>
