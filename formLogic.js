@@ -69,6 +69,7 @@ require([
     const isVisible = container.style.display !== "none";
     container.style.display = isVisible ? "none" : "block";
     toggleBtn.textContent = isVisible ? "Show Form" : "Hide Form";
+	toggleBtn.style.display = "block";
   });
   });
 
@@ -143,6 +144,9 @@ require([
         document.getElementById("honkSuccess").play();
         alert("HONK! Goose submitted!");
         document.getElementById("gooseForm").reset();
+		document.getElementById("formContainer").style.display = "none";
+		document.getElementById("toggleFormBtn").textContent = "Show Form";
+		document.getElementById("toggleFormBtn").style.display = "none";  // 👈 hides the button
       } else {
         alert("Submission failed. Try again!");
       }
